@@ -1,6 +1,8 @@
 import glob
 import os
 import yaml
+import helper
+from generator import ecs_helpers
 
 # File loading stuff
 
@@ -27,6 +29,18 @@ def load_schema_files(files=ecs_files()):
         new_fields = read_schema_file(f)
         fields_nested.update(new_fields)
     return fields_nested
+
+
+def load_use_case_files(files):
+    merged_fields = {}
+    for f in files:
+        fields = helper.read_use_case_file(f)
+        merged_fields = ecs_helpers.merge_dict_overwrite(merged_fields, fields)
+
+    fields_flat = {}
+    finalize_schemas(merged_fields, fields_flat)
+    return merged_fields, fields_flat
+
 
 # Generic helpers
 
@@ -179,4 +193,4 @@ def load_schemas(files=ecs_files()):
     fields_nested = load_schema_files(files)
     fields_flat = {}
     finalize_schemas(fields_nested, fields_flat)
-    return (fields_nested, fields_flat)
+    return fields_nested, fields_flat

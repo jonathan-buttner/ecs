@@ -83,7 +83,7 @@ def clean_string_field(field, key):
     else:
         field[key] = ""
 
-    if "index" in field and field["index"] == False:
+    if "index" in field and field["index"] is False:
         field["type"] = "(not indexed)"
 
 

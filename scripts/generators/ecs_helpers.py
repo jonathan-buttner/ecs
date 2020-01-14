@@ -49,10 +49,34 @@ def safe_merge_dicts(a, b):
     return c
 
 
+def merge_dict_overwrite(a, b, path=None):
+    """
+    Merge dictionary b into a. This will overwrite fields in a. If the field types differ between the dictionaries
+    this will raise an error.
+    """
+    if path is None:
+        path = []
+    for key in b:
+        if key in a:
+            a_type = type(a[key])
+            b_type = type(b[key])
+            if isinstance(a[key], dict) and isinstance(b[key], dict):
+                merge_dict_overwrite(a[key], b[key], path + [str(key)])
+            elif a_type != b_type:
+                raise ValueError('Conflict in types found at {}'.format('.'.join(path +[str(key)])))
+            elif a[key] == b[key]:
+                pass  # same leaf value
+            else:
+                raise ValueError('Conflict at {}'.format('.'.join(path + [str(key)])))
+        else:
+            a[key] = b[key]
+    return a
+
+
 def yaml_ordereddict(dumper, data):
     # YAML representation of an OrderedDict will be like a dictionary, but
     # respecting the order of the dictionary.
-    # Almost sure it's unndecessary with Python 3.
+    # Almost sure it's unnecessary with Python 3.
     value = []
     for item_key, item_value in data.items():
         node_key = dumper.represent_data(item_key)
