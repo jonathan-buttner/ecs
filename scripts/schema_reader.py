@@ -42,6 +42,12 @@ def load_use_case_files(files):
     return merged_fields, fields_flat
 
 
+def read_use_case_file(path):
+    with open(path) as f:
+        use_case = yaml.safe_load(f.read())
+
+    
+
 # Generic helpers
 
 

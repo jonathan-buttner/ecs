@@ -33,12 +33,13 @@ def main():
         flat = ecs_helpers.safe_merge_dicts(flat, custom_flat)
 
     if args.use_case_dir:
+        print('Loading use case directory: {}'.format(args.use_case_dir))
         use_cases_nested, use_cases_flat = schema_reader.load_use_case_files(get_yaml_files(args.use_case_dir))
 
         # Merge and allow user schemas to overwrite default schemas
         nested = ecs_helpers.merge_dict_overwrite(nested, use_cases_nested)
         flat = ecs_helpers.merge_dict_overwrite(flat, use_cases_flat)
-        
+
     intermediate_files.generate(nested, flat)
     if args.intermediate_only:
         exit()
