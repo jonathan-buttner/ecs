@@ -56,7 +56,7 @@ def fields_subset(subset, fields):
         # Every field must have a 'fields' key or the schema is invalid
         if isinstance(val['fields'], dict):
             # Copy the full field over so we get all the options, then replace the 'fields' with the right subset
-            retained_fields[key] = fields[key]
+            retained_fields[key] = deepcopy(fields[key])
             retained_fields[key]['fields'] = fields_subset(val['fields'], fields[key]['fields'])
         elif val['fields'] == '*':
             retained_fields[key] = fields[key]
