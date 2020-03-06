@@ -60,7 +60,8 @@ def main():
     csv_generator.generate(flat, ecs_version, out_dir)
     es_template.generate(flat, ecs_version, out_dir)
     beats.generate(nested, ecs_version, out_dir)
-    asciidoc_fields.generate(nested, flat, ecs_version, docs_dir)
+    if not args.subset:
+        asciidoc_fields.generate(nested, flat, ecs_version, docs_dir)
 
 
 def argument_parser():
