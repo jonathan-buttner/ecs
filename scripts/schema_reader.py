@@ -125,6 +125,8 @@ def merge_schema_fields(a, b):
                     'top_level', False) or b[key]['reusable']['top_level']
                 a[key]['reusable'].setdefault('expected', [])
                 a[key]['reusable']['expected'].extend(b[key]['reusable']['expected'])
+            if 'field_details' not in a[key] and 'field_details' in b[key]:
+                a[key]['field_details'] = copy.deepcopy(b[key]['field_details'])
             if 'fields' in b[key]:
                 a[key].setdefault('fields', {})
                 merge_schema_fields(a[key]['fields'], b[key]['fields'])

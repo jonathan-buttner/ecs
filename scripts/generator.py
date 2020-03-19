@@ -3,6 +3,7 @@ import glob
 import os
 import schema_reader
 import yaml
+import copy
 from generators import intermediate_files
 from generators import csv_generator
 from generators import es_template
@@ -54,7 +55,7 @@ def main():
     ecs_helpers.make_dirs(docs_dir)
     stripped_nested = {}
     for key in nested:
-        stripped_nested[key] = nested[key]
+        stripped_nested[key] = copy.deepcopy(nested[key])
         fields = nested[key]['fields'].copy()
         stripped_nested[key]['fields'] = {}
         for subkey in fields:
@@ -63,13 +64,13 @@ def main():
                     'type': fields[subkey]['type'],
                     'description': fields[subkey]['description']
                 }
-    intermediate_files.generate(stripped_nested, flat, out_dir)
+    intermediate_files.generate(stripped_nested, nested, flat, out_dir)
     if args.intermediate_only:
         exit()
 
-    # csv_generator.generate(flat, ecs_version, out_dir)
+    csv_generator.generate(flat, ecs_version, out_dir)
     es_template.generate(flat, ecs_version, out_dir)
-    # beats.generate(nested, ecs_version, out_dir)
+    beats.generate(nested, ecs_version, out_dir)
     if not args.subset:
         asciidoc_fields.generate(nested, flat, ecs_version, docs_dir)
 
