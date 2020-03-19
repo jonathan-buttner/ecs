@@ -52,14 +52,24 @@ def main():
 
     ecs_helpers.make_dirs(out_dir)
     ecs_helpers.make_dirs(docs_dir)
-
-    intermediate_files.generate(nested, flat, out_dir)
+    stripped_nested = {}
+    for key in nested:
+        stripped_nested[key] = nested[key]
+        fields = nested[key]['fields'].copy()
+        stripped_nested[key]['fields'] = {}
+        for subkey in fields:
+            if 'original_fieldset' not in fields[subkey]:
+                stripped_nested[key]['fields'][subkey] = {
+                    'type': fields[subkey]['type'],
+                    'description': fields[subkey]['description']
+                }
+    intermediate_files.generate(stripped_nested, flat, out_dir)
     if args.intermediate_only:
         exit()
 
-    csv_generator.generate(flat, ecs_version, out_dir)
+    # csv_generator.generate(flat, ecs_version, out_dir)
     es_template.generate(flat, ecs_version, out_dir)
-    beats.generate(nested, ecs_version, out_dir)
+    # beats.generate(nested, ecs_version, out_dir)
     if not args.subset:
         asciidoc_fields.generate(nested, flat, ecs_version, docs_dir)
 

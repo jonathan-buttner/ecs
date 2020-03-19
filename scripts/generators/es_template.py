@@ -15,7 +15,7 @@ def generate(ecs_flat, ecs_version, out_dir):
     mappings_section = mapping_settings(ecs_version)
     mappings_section['properties'] = field_mappings
 
-    generate_template_version(6, mappings_section, out_dir)
+    # generate_template_version(6, mappings_section, out_dir)
     generate_template_version(7, mappings_section, out_dir)
 
 # Field mappings
