@@ -175,7 +175,7 @@ def field_assertions_and_warnings(field):
 # Common
 
 
-SHORT_LIMIT = 120
+SHORT_LIMIT = 10000
 
 
 def single_line_short_description(schema_or_field):
